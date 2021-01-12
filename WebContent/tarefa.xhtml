@@ -1,0 +1,92 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+  
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+      
+  <ui:include src="/head.xhtml"/>
+
+  <h:body>
+
+    <h1 class="title">Gerenciamento de Tarefas</h1>
+
+    <div align="center">
+      <fieldset>
+      
+        <legend>
+          <h:outputText value="Tarefas por usuário"/>
+        </legend>
+        
+        <h:form>
+          
+          <br/>
+        
+          <h:outputText value="Não há usuários cadastrados" rendered="#{empty tarefaView.usuariosCadastrados}"/>
+          
+          <h:outputLabel for="usuarios" value="Selecione o usuário: " rendered="#{not empty tarefaView.usuariosCadastrados}"/>
+          
+          <h:selectOneMenu id="usuarios" valueChangeListener="#{tarefaView.selecionarUsuario}"
+                           rendered="#{not empty tarefaView.usuariosCadastrados}">
+            <f:selectItem itemLabel=" --- " noSelectionOption="true" itemDisabled="#{not empty tarefaView.emailUsuarioSelecionado}"/>
+            <f:selectItems value="#{tarefaView.usuariosCadastrados}" var="usuario" itemLabel="#{usuario.nome}" itemValue="#{usuario.email}"/>
+            <f:ajax render="@form"/>
+          </h:selectOneMenu>
+          
+          <br/>
+          <br/>
+          
+          <h:panelGrid columns="3" styleClass="formTable" rendered="#{not empty tarefaView.usuariosCadastrados}">
+            <h:outputLabel for="titulo" value="Título:"/>
+            <h:inputText id="titulo" value="#{tarefaView.tarefa.titulo}" disabled="#{tarefaView.desabilitado}" required="true"
+                         requiredMessage="A tarefa deve possuir um título"/>
+            <h:message for="titulo"/>
+            <h:outputLabel for="data" value="Data (dd/MM/yyyy):"/>
+            <h:inputText id="data" value="#{tarefaView.tarefa.data}" disabled="#{tarefaView.desabilitado}" converterMessage="Data inválida">
+              <f:convertDateTime pattern="dd/MM/yyyy"/> 
+            </h:inputText>
+            <h:message for="data"/>
+          </h:panelGrid>
+          
+          <h:panelGrid columns="2">
+            <h:commandButton value="Atribuir Tarefa" action="#{tarefaView.atribuirTarefa}" rendered="#{not empty tarefaView.usuariosCadastrados}"
+                             disabled="#{tarefaView.desabilitado}"/>
+            <h:commandButton value="Voltar" action="#{tarefaView.voltar}" immediate="true"/>
+          </h:panelGrid>
+          
+          <br/>
+          
+          <h:dataTable var="tarefa" value="#{tarefaView.tarefas}" border="1" styleClass="mainTable" captionClass="caption1"
+                       headerClass="heading" rowClasses="even, odd" rendered="#{not empty tarefaView.tarefas}">
+
+            <f:facet name="caption">
+              <h:outputText value="Tarefas"/>
+            </f:facet>
+            
+            <h:column>
+              <f:facet name="header">
+                <h:outputText value="Título"/>
+              </f:facet>
+              <h:outputText value="#{tarefa.titulo}"/>
+            </h:column>
+            
+            <h:column>
+              <f:facet name="header">
+                <h:outputText value="Data"/>
+              </f:facet>
+              <h:outputText value="#{tarefa.data}">
+                <f:convertDateTime pattern="dd/MM/yyyy"/>
+              </h:outputText>
+            </h:column>
+            
+          </h:dataTable>
+          
+          <br/>
+          
+        </h:form>
+        
+      </fieldset>
+    </div>
+  </h:body>
+</html>

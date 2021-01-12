@@ -1,0 +1,74 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+  
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+      
+  <ui:include src="/head.xhtml"/>
+
+  <h:body>
+
+    <h1 class="title">Cadastro de Usuários</h1>
+
+    <div align="center">
+      <br/>
+      <fieldset>
+      
+        <h:form>
+        
+          <br/>
+        
+          <h:panelGrid columns="3" styleClass="formTable">
+            <h:outputLabel for="nome" value="Nome:"/>
+            <h:inputText id="nome" value="#{cadastroView.usuario.nome}" required="true" requiredMessage="É necessário informar o nome"/>
+            <h:message for="nome"/>
+            <h:outputLabel for="email" value="E-mail:"/>
+            <h:inputText id="email" value="#{cadastroView.usuario.email}" binding="#{cadastroView.component}" required="true"
+                         requiredMessage="É necessário informar o e-mail"/>
+            <h:message for="email"/>
+            <h:outputLabel for="senha" value="Senha:"/>
+            <h:inputSecret id="senha" value="#{cadastroView.usuario.senha}" redisplay="true" required="true"
+                           requiredMessage="É necessário inserir uma senha"/>
+            <h:message for="senha"/>  
+          </h:panelGrid>
+          
+          <h:panelGrid columns="2">
+            <h:commandButton value="Cadastrar" action="#{cadastroView.cadastrar}"/>
+            <h:commandButton value="Voltar" action="#{cadastroView.voltar}" immediate="true"/>
+          </h:panelGrid>
+          
+          <br/>
+          
+          <h:dataTable var="usuario" value="#{cadastroView.usuariosCadastrados}" border="1" styleClass="mainTable" captionClass="caption1"
+                       headerClass="heading" rowClasses="even,odd" rendered="#{not empty cadastroView.usuariosCadastrados}">
+
+            <f:facet name="caption">
+              <h:outputText value="Cadastrados"/>
+            </f:facet>
+            
+            <h:column>
+              <f:facet name="header">
+                <h:outputText value="Nome"/>
+              </f:facet>
+              <h:outputText value="#{usuario.nome}"/>
+            </h:column>
+            
+            <h:column>
+              <f:facet name="header">
+                <h:outputText value="E-mail"/>
+              </f:facet>
+              <h:outputText value="#{usuario.email}"/>
+            </h:column>
+            
+          </h:dataTable>
+          
+          <br/>
+          
+        </h:form>
+        
+      </fieldset>
+    </div>
+  </h:body>
+</html>
